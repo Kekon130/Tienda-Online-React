@@ -1,21 +1,42 @@
 import { useEffect } from 'react';
 
 import Header from './components/Header';
-// import Products from './components/Products'
+import Products from './components/Products';
 // import Cart from './components/Cart'
 
 import { StoreProvider, useStore } from './context/StoreContext';
 
 function AppContent() {
 	const { setCategories } = useStore();
-	//useEffect()
+	useEffect(() => {
+		const fetchData = async () => {
+			const response = await fetch('http://localhost:3000/categories');
+			const categories = await response.json();
+			const categoriesWithProducts = await Promise.all(
+				categories.map(async (category) => {
+					const productsResponse = await fetch(
+						'http://localhost:3000/products?category_id=eq.' + category.id,
+					);
+					const products = await productsResponse.json();
+					return {
+						...category,
+						products,
+					};
+				}),
+			);
+			setCategories(categoriesWithProducts);
+		};
+		fetchData();
+	}, [setCategories]);
 
 	return (
 		<>
 			<Header />
 			<div className="container-fluid py-4">
 				<div className="row g-4">
-					<div className="col-lg-8">{/* <Products /> */}</div>
+					<div className="col-lg-8">
+						<Products />
+					</div>
 					<div className="col-lg-4">{/* <Crt /> */}</div>
 				</div>
 			</div>

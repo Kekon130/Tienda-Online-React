@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 
 import Header from './components/Header';
 import Products from './components/Products';
-// import Cart from './components/Cart'
+import Cart from './components/Cart';
 
 import { StoreProvider, useStore } from './context/StoreContext';
 
@@ -37,7 +37,9 @@ function AppContent() {
 					<div className="col-lg-8">
 						<Products />
 					</div>
-					<div className="col-lg-4">{/* <Crt /> */}</div>
+					<div className="col-lg-4">
+						<Cart />
+					</div>
 				</div>
 			</div>
 		</>

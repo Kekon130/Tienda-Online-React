@@ -24,8 +24,9 @@ export function StoreProvider({ children }) {
 
 		if (selectedProduct) {
 			const updatedCart = [...cart];
+
 			const item = updatedCart.find((item) => {
-				item.product.id === productId;
+				return item.product.id === productId;
 			});
 
 			if (item) {
@@ -45,7 +46,7 @@ export function StoreProvider({ children }) {
 	function removeFromCart(productId) {
 		const updatedCart = [...cart];
 		const item = updatedCart.find((item) => {
-			item.product.id === productId;
+			return item.product.id === productId;
 		});
 
 		if (item) {

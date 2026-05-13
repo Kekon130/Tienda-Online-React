@@ -5,6 +5,7 @@ import Products from './components/Products';
 import Cart from './components/Cart';
 
 import { StoreProvider, useStore } from './context/StoreContext';
+import AdminPanel from './components/AdminPanel';
 
 function AppContent() {
 	const { setCategories } = useStore();
@@ -32,6 +33,7 @@ function AppContent() {
 	return (
 		<>
 			<Header />
+			<AdminPanel />
 			<div className="container-fluid py-4">
 				<div className="row g-4">
 					<div className="col-lg-8">

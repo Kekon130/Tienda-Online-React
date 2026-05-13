@@ -7,15 +7,17 @@ export default function ProductCard({ product }) {
 	return (
 		<div className="col-sm-6 col-xl-4">
 			<div className={`card h-100 shadow-sm ${outOfStock ? 'opacity-50' : ''}`}>
-				<img
-					src={product.image}
-					className="card-img-top"
-					alt={product.name}
-					style={{
-						height: '240px',
-						objectFit: 'cover',
-					}}
-				/>
+				<div className="product-image-container">
+					<img
+						src={product.image}
+						className="card-img-top product-image"
+						alt={product.name}
+						style={{
+							height: '240px',
+							objectFit: 'cover',
+						}}
+					/>
+				</div>
 				<div className="card-body d-flex flex-column">
 					<div className="mb-2">
 						<h5 className="card-title fw-bold">{product.name}</h5>

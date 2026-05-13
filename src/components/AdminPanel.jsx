@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useStore } from '../context/StoreContext';
 
 export default function AdminPanel() {
-	const { categories, setCategories, adminLogged, setAdminLogged } = useStore();
+	const { categories, setCategories, adminLogged, setAdminLogged, showToast } = useStore();
 	const [password, setPassword] = useState('');
 	const [category, setCategory] = useState({
 		id: '',
@@ -29,22 +29,22 @@ export default function AdminPanel() {
 	function createCategory() {
 		const exists = categories.some((c) => c.id === category.id);
 		if (exists) {
-			alert('La categoría ya existe');
-			return;
+			showToast('La categoría ya existe', 'danger');
+		} else {
+			setCategories([
+				...categories,
+				{
+					...category,
+					products: [],
+				},
+			]);
+
+			setCategory({
+				id: '',
+				name: '',
+			});
+			showToast('Categoria creada correctamente');
 		}
-
-		setCategories([
-			...categories,
-			{
-				...category,
-				products: [],
-			},
-		]);
-
-		setCategory({
-			id: '',
-			name: '',
-		});
 	}
 
 	function createProduct() {
@@ -53,42 +53,41 @@ export default function AdminPanel() {
 		);
 
 		if (exists) {
-			alert('El producto ya existe');
-			return;
+			showToast('El producto ya existe', 'danger');
+		} else {
+			const updatedCategories = categories.map((category) => {
+				if (category.id !== product.categoryId) {
+					return category;
+				} else {
+					return {
+						...category,
+						products: [
+							...category.products,
+							{
+								id: product.id,
+								name: product.name,
+								description: product.description,
+								price: Number(product.price),
+								stock: Number(product.stock),
+								image: product.image,
+							},
+						],
+					};
+				}
+			});
+
+			setCategories(updatedCategories);
+
+			setProduct({
+				id: '',
+				name: '',
+				description: '',
+				price: '',
+				stock: '',
+				image: '',
+				categoryId: '',
+			});
 		}
-
-		const updatedCategories = categories.map((category) => {
-			if (category.id !== product.categoryId) {
-				return category;
-			}
-
-			return {
-				...category,
-				products: [
-					...category.products,
-					{
-						id: product.id,
-						name: product.name,
-						description: product.description,
-						price: Number(product.price),
-						stock: Number(product.stock),
-						image: product.image,
-					},
-				],
-			};
-		});
-
-		setCategories(updatedCategories);
-
-		setProduct({
-			id: '',
-			name: '',
-			description: '',
-			price: '',
-			stock: '',
-			image: '',
-			categoryId: '',
-		});
 	}
 
 	return (

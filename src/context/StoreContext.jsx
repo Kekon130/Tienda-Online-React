@@ -5,6 +5,7 @@ export function StoreProvider({ children }) {
 	const [categories, setCategories] = useState([]);
 	const [cart, setCart] = useState([]);
 	const [adminLogged, setAdminLogged] = useState(false);
+	const [toasts, setToasts] = useState([]);
 
 	function addToCart(productId) {
 		const updatedCategories = [...categories];
@@ -70,6 +71,33 @@ export function StoreProvider({ children }) {
 		}
 	}
 
+	function showToast(message, type = 'success') {
+		const id = Date.now();
+		const toast = {
+			id,
+			message,
+			type,
+		};
+
+		setToasts((prev) => [...prev, toast]);
+		setTimeout(() => {
+			setToasts((prev) => {
+				return prev.filter((toast) => {
+					return toast.id != id;
+				});
+			});
+		}, 3000);
+	}
+
+	function checkout() {
+		if (cart.length === 0) {
+			showToast('El carrito está vacío', 'danger');
+		} else {
+			setCart([]);
+			showToast('Pedido realizado correctamente');
+		}
+	}
+
 	return (
 		<StoreContext.Provider
 			value={{
@@ -80,6 +108,9 @@ export function StoreProvider({ children }) {
 				removeFromCart,
 				adminLogged,
 				setAdminLogged,
+				toasts,
+				showToast,
+				checkout,
 			}}
 		>
 			{children}

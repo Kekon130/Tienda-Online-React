@@ -2,7 +2,7 @@ import { useStore } from '../context/StoreContext';
 import ItemCard from './ItemCard';
 
 export default function Cart() {
-	const { cart, addToCart, removeFromCart } = useStore();
+	const { cart, addToCart, removeFromCart, checkout } = useStore();
 
 	const total = cart.reduce((sum, item) => {
 		return sum + item.product.price * item.quantity;
@@ -36,7 +36,7 @@ export default function Cart() {
 							<h5 className="mb-0">Total</h5>
 							<h4 className="text-success mb-0">{total.toFixed(2)}€</h4>
 						</div>
-						<button className="btn btn-success w-100">
+						<button className="btn btn-success w-100" onClick={checkout}>
 							<i className="bi bi-bag-check me-2"></i>
 							Realizar Pedido
 						</button>

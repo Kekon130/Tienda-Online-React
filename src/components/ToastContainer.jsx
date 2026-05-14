@@ -4,11 +4,15 @@ export default function ToastContainer() {
 	const { toasts } = useStore();
 
 	return (
-		<div className="toast-container position-fixed bottom-0 end-0 p-3">
+		<div className="toast-container position-fixed top-0 start-50 translate-middle-x pt-3" style={{ zIndex: 1100 }}>
 			{toasts.map((toast) => (
-				<div key={toast.id} className={`toast show text-bg-${toast.type} border-0 mb-2`}>
-					<div className="d-flex">
-						<div className="toast-body">{toast.message}</div>
+				<div
+					key={toast.id}
+					className={`toast show text-bg-${toast.type} border-0 mb-2`}
+					style={{ minWidth: '400px' }}
+				>
+					<div className="toast-body fs-5 fw-semibold text-center py-3">
+						{toast.message}
 					</div>
 				</div>
 			))}

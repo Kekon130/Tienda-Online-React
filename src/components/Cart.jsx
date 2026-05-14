@@ -2,15 +2,14 @@ import { useStore } from '../context/StoreContext';
 import ItemCard from './ItemCard';
 
 export default function Cart() {
-	const { cart, addToCart, removeFromCart, checkout } = useStore();
+	const { cart, addToCart, removeFromCart, clearCart, checkout } = useStore();
 
 	const total = cart.reduce((sum, item) => {
 		return sum + item.product.price * item.quantity;
 	}, 0);
 
 	return (
-		<>
-			<div className="offcanvas offcanvas-end" tabIndex="-1" id="cartOffcanvas">
+		<div className="offcanvas offcanvas-end" tabIndex="-1" id="cartOffcanvas">
 				<div className="offcanvas-header border-bottom">
 					<div>
 						<h5 className="offcanvas-title fw-bold">Carrito</h5>
@@ -36,13 +35,20 @@ export default function Cart() {
 							<h5 className="mb-0">Total</h5>
 							<h4 className="text-success mb-0">{total.toFixed(2)}€</h4>
 						</div>
-						<button className="btn btn-success w-100" onClick={checkout}>
+						<button className="btn btn-success w-100 mb-2" onClick={checkout}>
 							<i className="bi bi-bag-check me-2"></i>
 							Realizar Pedido
+						</button>
+						<button
+							className="btn btn-outline-danger w-100"
+							onClick={clearCart}
+							disabled={cart.length === 0}
+						>
+							<i className="bi bi-trash me-2"></i>
+							Vaciar carrito
 						</button>
 					</div>
 				</div>
 			</div>
-		</>
 	);
 }

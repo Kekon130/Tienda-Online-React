@@ -20,7 +20,7 @@ export default function AdminPanel() {
 
 	function login() {
 		if (password !== '123456') {
-			alert('Contraseña incorrecta');
+			showToast('Contraseña incorrecta', 'danger');
 		} else {
 			setAdminLogged(true);
 		}
@@ -87,6 +87,7 @@ export default function AdminPanel() {
 				image: '',
 				categoryId: '',
 			});
+			showToast('Producto creado correctamente');
 		}
 	}
 

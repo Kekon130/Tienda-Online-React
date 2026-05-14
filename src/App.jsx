@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 import Header from './components/Header';
 import Products from './components/Products';
@@ -7,28 +7,18 @@ import ToastContainer from './components/ToastContainer';
 
 import { StoreProvider, useStore } from './context/StoreContext';
 import AdminPanel from './components/AdminPanel';
+import { fetchCategoriesWithProducts } from './services/api';
 
 function AppContent() {
 	const { setCategories } = useStore();
+	const [loading, setLoading] = useState(true);
+	const [error, setError] = useState(null);
+
 	useEffect(() => {
-		const fetchData = async () => {
-			const response = await fetch('http://localhost:3000/categories');
-			const categories = await response.json();
-			const categoriesWithProducts = await Promise.all(
-				categories.map(async (category) => {
-					const productsResponse = await fetch(
-						'http://localhost:3000/products?category_id=eq.' + category.id,
-					);
-					const products = await productsResponse.json();
-					return {
-						...category,
-						products,
-					};
-				}),
-			);
-			setCategories(categoriesWithProducts);
-		};
-		fetchData();
+		fetchCategoriesWithProducts()
+			.then(setCategories)
+			.catch((err) => setError(err.message))
+			.finally(() => setLoading(false));
 	}, [setCategories]);
 
 	return (
@@ -39,7 +29,19 @@ function AppContent() {
 			<div className="container-fluid py-4">
 				<div className="row g-4">
 					<div className="col-lg-8">
-						<Products />
+						{loading && (
+							<div className="d-flex justify-content-center py-5">
+								<div className="spinner-border text-primary" role="status">
+									<span className="visually-hidden">Cargando...</span>
+								</div>
+							</div>
+						)}
+						{error && (
+							<div className="alert alert-danger" role="alert">
+								{error}
+							</div>
+						)}
+						{!loading && !error && <Products />}
 					</div>
 					<div className="col-lg-4">
 						<Cart />

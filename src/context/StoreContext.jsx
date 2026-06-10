@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 
 const StoreContext = createContext();
 export function StoreProvider({ children }) {
@@ -6,6 +6,16 @@ export function StoreProvider({ children }) {
 	const [cart, setCart] = useState([]);
 	const [adminLogged, setAdminLogged] = useState(false);
 	const [toasts, setToasts] = useState([]);
+	const [theme, setTheme] = useState(() => localStorage.getItem('theme') || 'light');
+
+	useEffect(() => {
+		document.documentElement.setAttribute('data-bs-theme', theme);
+		localStorage.setItem('theme', theme);
+	}, [theme]);
+
+	function toggleTheme() {
+		setTheme((prev) => (prev === 'light' ? 'dark' : 'light'));
+	}
 
 	function addToCart(productId) {
 		let updatedProduct = null;
@@ -121,6 +131,8 @@ export function StoreProvider({ children }) {
 				toasts,
 				showToast,
 				checkout,
+				theme,
+				toggleTheme,
 			}}
 		>
 			{children}

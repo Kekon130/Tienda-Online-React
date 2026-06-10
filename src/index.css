@@ -1,11 +1,96 @@
-.product-image {
-	transition: 0.8s ease;
+:root,
+[data-bs-theme='light'] {
+	--app-bg: #fffffe;
+	--app-title: #181818;
+	--app-text: #2e2e2e;
+	--app-btn-bg: #4fc4cf;
+	--app-btn-text: #181818;
+	--app-border: #181818;
+	--app-accent-1: #994ff3;
+	--app-accent-2: #fbdd74;
+
+	--bs-body-bg: var(--app-bg);
+	--bs-body-color: var(--app-text);
+	--bs-border-color: var(--app-border);
+	--bs-emphasis-color: var(--app-title);
+	--bs-primary: var(--app-btn-bg);
+	--bs-primary-rgb: 79, 196, 207;
 }
 
-.product-image:hover {
-	transform: scale(1.2);
+[data-bs-theme='dark'] {
+	--app-bg: #16161a;
+	--app-title: #fffffe;
+	--app-text: #94a1b2;
+	--app-btn-bg: #7f5af0;
+	--app-btn-text: #fffffe;
+	--app-border: #010101;
+	--app-accent-1: #72757e;
+	--app-accent-2: #2cb67d;
+
+	--bs-body-bg: var(--app-bg);
+	--bs-body-color: var(--app-text);
+	--bs-border-color: var(--app-border);
+	--bs-emphasis-color: var(--app-title);
+	--bs-primary: var(--app-btn-bg);
+	--bs-primary-rgb: 127, 90, 240;
+}
+
+body {
+	background-color: var(--app-bg);
+	color: var(--app-text);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.card-title,
+.navbar-brand,
+.accordion-button {
+	color: var(--app-title);
+}
+
+.btn-primary {
+	--bs-btn-bg: var(--app-btn-bg);
+	--bs-btn-color: var(--app-btn-text);
+	--bs-btn-border-color: var(--app-border);
+	--bs-btn-hover-bg: var(--app-btn-bg);
+	--bs-btn-hover-color: var(--app-btn-text);
+	--bs-btn-hover-border-color: var(--app-border);
+	--bs-btn-active-bg: var(--app-btn-bg);
+	--bs-btn-active-color: var(--app-btn-text);
+	--bs-btn-active-border-color: var(--app-border);
+	--bs-btn-disabled-bg: var(--app-btn-bg);
+	--bs-btn-disabled-color: var(--app-btn-text);
+	--bs-btn-disabled-border-color: var(--app-border);
+	filter: none;
+}
+
+.btn-primary:hover {
+	filter: brightness(0.92);
+}
+
+/* Accent-driven highlights */
+.text-success {
+	color: var(--app-accent-1) !important;
+}
+
+.badge.bg-primary {
+	background-color: var(--app-accent-1) !important;
+	color: var(--app-btn-text) !important;
+}
+
+/* Product image: enlarge on hover while images cycle (JS) */
+.product-image {
+	transition: transform 0.5s ease, opacity 0.4s ease;
 }
 
 .product-image-container {
 	overflow: hidden;
+}
+
+.product-image-container:hover .product-image {
+	transform: scale(1.15);
 }

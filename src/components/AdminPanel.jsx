@@ -14,9 +14,27 @@ export default function AdminPanel() {
 		description: '',
 		price: '',
 		stock: '',
-		image: '',
+		images: [''],
 		categoryId: '',
 	});
+
+	function updateImage(index, value) {
+		setProduct((prev) => ({
+			...prev,
+			images: prev.images.map((img, i) => (i === index ? value : img)),
+		}));
+	}
+
+	function addImageField() {
+		setProduct((prev) => ({ ...prev, images: [...prev.images, ''] }));
+	}
+
+	function removeImageField(index) {
+		setProduct((prev) => ({
+			...prev,
+			images: prev.images.filter((_, i) => i !== index),
+		}));
+	}
 
 	function login() {
 		if (password !== '123456') {
@@ -54,41 +72,49 @@ export default function AdminPanel() {
 
 		if (exists) {
 			showToast('El producto ya existe', 'danger');
-		} else {
-			const updatedCategories = categories.map((category) => {
-				if (category.id !== product.categoryId) {
-					return category;
-				} else {
-					return {
-						...category,
-						products: [
-							...category.products,
-							{
-								id: product.id,
-								name: product.name,
-								description: product.description,
-								price: Number(product.price),
-								stock: Number(product.stock),
-								image: product.image,
-							},
-						],
-					};
-				}
-			});
-
-			setCategories(updatedCategories);
-
-			setProduct({
-				id: '',
-				name: '',
-				description: '',
-				price: '',
-				stock: '',
-				image: '',
-				categoryId: '',
-			});
-			showToast('Producto creado correctamente');
+			return;
 		}
+
+		const images = product.images.map((img) => img.trim()).filter(Boolean);
+		if (images.length === 0) {
+			showToast('Añade al menos una imagen', 'danger');
+			return;
+		}
+
+		const updatedCategories = categories.map((category) => {
+			if (category.id !== product.categoryId) {
+				return category;
+			} else {
+				return {
+					...category,
+					products: [
+						...category.products,
+						{
+							id: product.id,
+							name: product.name,
+							description: product.description,
+							price: Number(product.price),
+							stock: Number(product.stock),
+							images,
+							image: images[0],
+						},
+					],
+				};
+			}
+		});
+
+		setCategories(updatedCategories);
+
+		setProduct({
+			id: '',
+			name: '',
+			description: '',
+			price: '',
+			stock: '',
+			images: [''],
+			categoryId: '',
+		});
+		showToast('Producto creado correctamente');
 	}
 
 	return (
@@ -306,18 +332,35 @@ export default function AdminPanel() {
 													</div>
 
 													<div className="col-12">
-														<input
-															type="text"
-															className="form-control"
-															placeholder="URL imagen"
-															value={product.image}
-															onChange={(e) =>
-																setProduct({
-																	...product,
-																	image: e.target.value,
-																})
-															}
-														/>
+														<label className="form-label">
+															Imágenes <small className="text-muted">(la primera es la principal)</small>
+														</label>
+														{product.images.map((img, index) => (
+															<div className="input-group mb-2" key={index}>
+																<input
+																	type="text"
+																	className="form-control"
+																	placeholder={`URL imagen ${index + 1}`}
+																	value={img}
+																	onChange={(e) => updateImage(index, e.target.value)}
+																/>
+																<button
+																	type="button"
+																	className="btn btn-outline-danger"
+																	disabled={product.images.length <= 1}
+																	onClick={() => removeImageField(index)}
+																>
+																	<i className="bi bi-trash"></i>
+																</button>
+															</div>
+														))}
+														<button
+															type="button"
+															className="btn btn-outline-secondary btn-sm"
+															onClick={addImageField}
+														>
+															<i className="bi bi-plus-lg me-1"></i>Añadir imagen
+														</button>
 													</div>
 												</div>
 

@@ -9,15 +9,15 @@ export default function Cart() {
 	}, 0);
 
 	return (
-		<div className="offcanvas offcanvas-end" tabIndex="-1" id="cartOffcanvas">
-				<div className="offcanvas-header border-bottom">
-					<div>
-						<h5 className="offcanvas-title fw-bold">Carrito</h5>
-						<small className="text-muted">Productos seleccionados</small>
-					</div>
-					<button type="button" className="btn-close" data-bs-dismiss="offcanvas"></button>
+		<div
+			className="card shadow-sm position-sticky d-flex flex-column"
+			style={{ top: '1rem', maxHeight: 'calc(100vh - 2rem)' }}
+		>
+				<div className="card-header border-bottom bg-body">
+					<h5 className="fw-bold mb-0">Carrito</h5>
+					<small className="text-muted">Productos seleccionados</small>
 				</div>
-				<div className="offcanvas-body d-flex flex-column">
+				<div className="card-body d-flex flex-column overflow-hidden">
 					{cart.length === 0 && (
 						<div className="text-center py-5">
 							<i className="bi bi-cart-x display-1 text-secondary"></i>
@@ -25,12 +25,12 @@ export default function Cart() {
 							<p className="text-muted">Agrega productos para comenzar tu pedido</p>
 						</div>
 					)}
-					<div className="flex-grow-1">
+					<div className="flex-grow-1 overflow-auto">
 						{cart.map((item) => (
 							<ItemCard key={item.product.id} item={item} />
 						))}
 					</div>
-					<div className="border-top pt-3 mt-3">
+					<div className="border-top pt-3 mt-3 flex-shrink-0">
 						<div className="d-flex justify-content-between align-items-center mb-3">
 							<h5 className="mb-0">Total</h5>
 							<h4 className="text-success mb-0">{total.toFixed(2)}€</h4>

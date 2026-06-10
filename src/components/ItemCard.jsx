@@ -19,6 +19,7 @@ export default function ItemCard({ item }) {
 					<div className="flex-grow-1 d-flex flex-column">
 						<div className="mb-2">
 							<h6 className="fw-bold mb-1">{item.product.name}</h6>
+							<p className="small text-secondary mb-1">{item.product.description}</p>
 							<small className="text-muted">{item.product.code || item.product.id}</small>
 						</div>
 						<p className="mb-1">

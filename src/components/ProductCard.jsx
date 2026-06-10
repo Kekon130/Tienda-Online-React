@@ -1,4 +1,5 @@
 import { useStore } from '../context/StoreContext';
+import ProductImage from './ProductImage';
 
 export default function ProductCard({ product }) {
 	const { addToCart } = useStore();
@@ -8,15 +9,7 @@ export default function ProductCard({ product }) {
 		<div className="col-sm-6 col-xl-4">
 			<div className={`card h-100 shadow-sm ${outOfStock ? 'opacity-50' : ''}`}>
 				<div className="product-image-container">
-					<img
-						src={product.image}
-						className="card-img-top product-image"
-						alt={product.name}
-						style={{
-							height: '240px',
-							objectFit: 'cover',
-						}}
-					/>
+					<ProductImage images={product.images} alt={product.name} />
 				</div>
 				<div className="card-body d-flex flex-column">
 					<div className="mb-2">

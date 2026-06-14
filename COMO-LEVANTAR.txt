@@ -1,0 +1,106 @@
+====================================================================
+ CÓMO LEVANTAR LA APLICACIÓN CON DOCKER
+====================================================================
+
+Esta aplicación se levanta por completo con Docker Compose. No necesitas
+instalar Node, PostgreSQL ni ninguna otra dependencia en tu máquina: solo
+Docker.
+
+
+--------------------------------------------------------------------
+ REQUISITOS PREVIOS
+--------------------------------------------------------------------
+
+- Docker instalado.        https://docs.docker.com/get-docker/
+- Docker Compose           https://docs.docker.com/compose/
+  (incluido en las versiones modernas de Docker como "docker compose").
+
+Verifica que están disponibles:
+
+    docker --version
+    docker compose version
+
+
+--------------------------------------------------------------------
+ SERVICIOS QUE SE LEVANTAN
+--------------------------------------------------------------------
+
+El archivo docker-compose.yaml define 4 servicios:
+
+  Servicio  Imagen              Puerto   Descripción
+  --------  ------------------  -------  ----------------------------------
+  db        postgres:18.3       5432     Base de datos PostgreSQL (shop_db).
+  server    postgrest:v14.10    3000     API REST sobre la base de datos.
+  swagger   swagger-ui:v5.32.5  8080     Documentación interactiva de la API.
+  web       build local (Nginx) 5173     Frontend React servido con Nginx.
+
+Al iniciar, la base de datos se inicializa automáticamente con el script
+db/init.sql (esquema, tablas y datos de ejemplo).
+
+
+--------------------------------------------------------------------
+ LEVANTAR LA APLICACIÓN
+--------------------------------------------------------------------
+
+Desde la raíz del proyecto:
+
+    docker compose up --build
+
+- "--build" reconstruye la imagen del frontend (web) a partir del
+  Dockerfile. Úsalo la primera vez o cuando cambies el código.
+
+- Para ejecutarlo en segundo plano (sin ocupar la terminal), añade "-d":
+
+    docker compose up --build -d
+
+La primera vez puede tardar unos minutos en descargar las imágenes y
+compilar el frontend.
+
+
+--------------------------------------------------------------------
+ ACCEDER A LA APLICACIÓN
+--------------------------------------------------------------------
+
+Una vez que todos los contenedores estén arriba:
+
+- Tienda (frontend):                 http://localhost:5173
+- API REST (PostgREST):              http://localhost:3000
+- Documentación de la API (Swagger): http://localhost:8080
+
+
+--------------------------------------------------------------------
+ COMANDOS ÚTILES
+--------------------------------------------------------------------
+
+Ver el estado de los contenedores:
+
+    docker compose ps
+
+Ver los logs (todos o de un servicio concreto):
+
+    docker compose logs -f
+    docker compose logs -f web
+
+Detener la aplicación (mantiene los datos):
+
+    docker compose down
+
+Detener y BORRAR también la base de datos (volumen incluido):
+
+    docker compose down -v
+
+
+--------------------------------------------------------------------
+ SOLUCIÓN DE PROBLEMAS
+--------------------------------------------------------------------
+
+- El frontend no refleja mis cambios:
+  Vuelve a construir la imagen con "docker compose up --build".
+
+- Un puerto ya está en uso:
+  Libera el puerto (5173, 3000, 8080 o 5432) o cambia el mapeo en
+  docker-compose.yaml.
+
+- La base de datos no se reinicializa:
+  El script db/init.sql solo se ejecuta cuando el volumen está vacío.
+  Usa "docker compose down -v" para partir de cero.
